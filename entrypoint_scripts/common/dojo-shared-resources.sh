@@ -313,12 +313,14 @@ function ensure_postgres_application_db() {
 }
 
 function ensure_application_db() {
+    if [ "$SKIP_DB_SETUP" != "yes" ];then
     # Setup the application DB
-    echo "Ensure application DB is present"
-    if [ "$DBTYPE" == $MYSQL ]; then
-        ensure_mysql_application_db
-    elif [ "$DBTYPE" == $POSTGRES ]; then
-        ensure_postgres_application_db
+      echo "Ensure application DB is present"
+      if [ "$DBTYPE" == $MYSQL ]; then
+          ensure_mysql_application_db
+      elif [ "$DBTYPE" == $POSTGRES ]; then
+          ensure_postgres_application_db
+      fi
     fi
 }
 

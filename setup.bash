@@ -24,8 +24,10 @@ verify_cwd
 # Allow script to be called non-interactively using:
 # export AUTO_DOCKER=yes && /opt/django-DefectDojo/setup.bash
 if [ "$AUTO_DOCKER" == "yes" ]; then
-    # Default to MySQL install
-    DBTYPE=$MYSQL
+    if [ -z "${DBTYPE}" ]; then
+      # Default to MySQL install
+      DBTYPE=$MYSQL
+    fi
 else
     prompt_db_type
 fi
@@ -42,7 +44,9 @@ install_os_dependencies
 install_db
 
 if [ "$AUTO_DOCKER" == "yes" ]; then
-    start_local_mysql_db_server
+    if [ -z "${DBHOST}" ]; then
+      start_local_mysql_db_server
+    fi
 fi
 
 # Create the application DB or recreate it, if it's already present
@@ -58,7 +62,9 @@ verify_python_version
 install_app
 
 if [ "$AUTO_DOCKER" == "yes" ]; then
-    stop_local_mysql_db_server
+    if [ -z "${DBHOST}" ]; then
+      stop_local_mysql_db_server
+    fi
 fi
 
 echo "=============================================================================="
